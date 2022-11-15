@@ -13,21 +13,12 @@ export enum BeerStyle {
 	SPECIALTY = 'Specialty',
 }
 
-export enum VisualCharacteristic {
-	BLONDE = 'Blonde',
-	GOLD = 'Gold',
-	AMBER = 'Amber',
-	RED = 'Red',
-	BROWN = 'Brown',
-	BLACK = 'Black',
-	CLEAR = 'Clear',
-	TRANSPARENT = 'Transparent',
-}
-
-export enum ScentCharacteristic {
+export enum BeerCharacteristic {
 	SWEET = 'Sweet',
 	FRUITY = 'Fruity',
 	BUTTERY = 'Buttery',
 	SPICY = 'Spicy',
 	FLORAL = 'Floral',
+	HOPPY = 'Hoppy',
+	BITTER = 'Bitter',
 }

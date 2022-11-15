@@ -1,41 +1,51 @@
-import Beer from './classes/Beer';
+import Beer from '../classes/Beer';
+import { BeerCharacteristic } from '../types';
 
 export interface BeerCardProps {
 	beer: Beer;
 }
 
 export const BeerCard = (props: any) => {
-	const { beer } = props;
+	const { beer }: BeerCardProps = props;
 
 	return (
-		<div className="notification">
-			<div className="columns">
-				<div className="column is-one-quarter">
+		<div className="section notification">
+			<div className="columns is-align-items-center">
+				<div className="column is-one-third mr-5">
 					<figure className="image">
-						<img src={beer.imageURL} alt={beer.name} />
+						<img src={beer.imageURL} />
 					</figure>
 				</div>
 				<div className="column">
-					<div className="content">
-						<h1>{beer.name} </h1>
-						<p className="m-0">
-							<b>Brewery: </b>
-							{beer.brewery.name}
-						</p>
-						<p>
+					<div className="content is-medium ml-5">
+						<p className="title is-1 mb-1">{beer.name}</p>
+						<p>{beer.brewery.name}</p>
+						<div className="tags">
+							{beer.averageCharacteristics.map((e: BeerCharacteristic) => (
+								<span className="tag is-info">{e}</span>
+							))}
+						</div>
+						<p className="mb-1">
 							<b>Style: </b>
 							{beer.style}
 						</p>
+						<p className="mb-1">
+							<b>ABV: </b>
+							{beer.abv}%
+						</p>
 						<p>
-							<b>Average rating: </b>
+							<b>IBU: </b>
+							{beer.ibu}
+						</p>
+						<p>
+							<b>Average Rating: </b>
 							{beer.averageRating} / 10
 						</p>
 						<progress
-							className="progress is-small"
+							className="progress is-info is-small"
 							value={beer.averageRating}
 							max="10"
 						></progress>
-						<p>This is some dummy text.</p>
 					</div>
 				</div>
 			</div>

@@ -1,22 +1,38 @@
-import { BeerStyle } from '../../types';
+import { BeerCharacteristic, BeerStyle } from '../types';
 
 import Brewery from './Brewery';
 import Review from './Review';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class Beer {
+	private _id: string;
 	private _name: string;
 	private _brewery: Brewery;
 	private _style?: BeerStyle;
 	private _abv?: number;
 	private _ibu?: number;
 	private _imageURL?: string;
-	private _averageRating?: number; // lazy init
-
+	private _averageRating?: number;
 	private _reviews: Review[] = [];
+	private _averageCharacteristics: BeerCharacteristic[] = [];
 
 	constructor(name: string, brewery: Brewery) {
+		this._id = uuidv4();
 		this._name = name;
 		this._brewery = brewery;
+		this._style = BeerStyle.INDIA_PALE_ALE;
+
+		this._averageRating = this.calculateAverageRating();
+		this._averageCharacteristics = this.gatherAverageCharacteristics();
+
+		this._ibu = 5;
+		this._abv = 5;
+		this._imageURL =
+			'https://www.americanolivermore.com/uploads/1/3/2/2/132257054/s141702492982091317_p69_i2_w888.jpeg';
+	}
+
+	get id(): string {
+		return this._id;
 	}
 
 	get name(): string {
@@ -59,6 +75,10 @@ export default class Beer {
 		return this._imageURL;
 	}
 
+	get averageCharacteristics(): BeerCharacteristic[] {
+		return this._averageCharacteristics;
+	}
+
 	get averageRating(): number | undefined {
 		return 7;
 
@@ -68,6 +88,14 @@ export default class Beer {
 		}
 		// return this._averageRating;
 		return this._averageRating;
+	}
+
+	gatherAverageCharacteristics(): BeerCharacteristic[] {
+		return [
+			BeerCharacteristic.SWEET,
+			BeerCharacteristic.FRUITY,
+			BeerCharacteristic.BUTTERY,
+		];
 	}
 
 	/**

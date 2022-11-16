@@ -1,27 +1,14 @@
+import testData from '../public/testdata';
 import Beer from './Beer';
 import Brewery from './Brewery';
 
 /* Singleton */
 export default class DB {
 	private static _instance?: DB; // lazy initialization
-	private _allBreweries: Brewery[];
-	private _allBeers: Beer[];
+	private _allBreweries: Brewery[] = this.fetchAllBreweries();
+	private _allBeers: Beer[] = this.fetchAllBeers();
 
-	private constructor() {
-		// Initialize breweries
-		this._allBreweries = [
-			new Brewery('Alpha'),
-			new Brewery('Beta'),
-			new Brewery('Charlie'),
-		];
-
-		// Initialize beers
-		this._allBeers = [
-			new Beer('Delta', this.getBreweryByName('Alpha')),
-			new Beer('Epsilon', this.getBreweryByName('Beta')),
-			new Beer('Gamma', this.getBreweryByName('Charlie')),
-		];
-	}
+	private constructor() {}
 
 	static get instance(): DB {
 		if (!this._instance) {
@@ -38,7 +25,13 @@ export default class DB {
 		return this._allBeers;
 	}
 
-	private fetchBreweries() {}
+	private fetchAllBreweries(): Brewery[] {
+		return testData.breweries;
+	}
+
+	private fetchAllBeers(): Beer[] {
+		return testData.beers;
+	}
 
 	getBreweryByName(name: string): Brewery {
 		name = name.toLowerCase();
@@ -50,8 +43,12 @@ export default class DB {
 		return brewery;
 	}
 
-	getBeerById(id: string | null): Beer | null {
-		return this._allBeers.find((beer) => beer.id == id) ?? null;
+	getBreweryById(id: string | null): Brewery | undefined {
+		return this._allBreweries.find((brewery) => brewery.id == id);
+	}
+
+	getBeerById(id: string | null): Beer | undefined {
+		return this._allBeers.find((beer) => beer.id == id);
 	}
 
 	/**
@@ -63,8 +60,8 @@ export default class DB {
 		searchTerm = searchTerm.toLowerCase();
 		return this._allBeers.filter((beer) => {
 			const beerName = beer.name.toLowerCase();
-			const breweryName = beer.brewery.name.toLowerCase();
-			return beerName.includes(searchTerm) || breweryName.includes(searchTerm);
+			const breweryName = beer.brewery?.name.toLowerCase();
+			return beerName.includes(searchTerm) || breweryName?.includes(searchTerm);
 		});
 	}
 }

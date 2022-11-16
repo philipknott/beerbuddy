@@ -23,9 +23,11 @@ export const BeerSearchResultCard = (props: BeerSearchResultCardProps) => {
 			</div>
 			<div className="media-content">
 				<div className="content">
-					<p className="title is-4 mb-2">
+					<p className="subtitle mb-2">
 						<b>{beer.name}</b>
-						<span className="has-text-grey"> - {beer.brewery.name}</span>
+						{!!beer.brewery && (
+							<span className="has-text-grey"> - {beer.brewery.name}</span>
+						)}
 					</p>
 					<div className="level">
 						<div className="level-left">

@@ -23,7 +23,9 @@ const BeerView = () => {
 			</nav>
 
 			<BeerCard beer={beer} />
-			<button className="button is-large is-success">Create Review</button>
+			<button className="button is-large is-success is-pulled-right">
+				Create Review
+			</button>
 		</div>
 	);
 };

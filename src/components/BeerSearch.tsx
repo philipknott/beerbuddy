@@ -21,7 +21,7 @@ export const BeerSearch = () => {
 			<div className="columns">
 				<div className="column">
 					<input
-						className="input is-large"
+						className="input is-medium"
 						type="text"
 						placeholder="Beer/Brewery Name"
 						value={searchTerm}
@@ -35,11 +35,11 @@ export const BeerSearch = () => {
 				</div>
 				<div className="column">
 					<div className="buttons">
-						<button className="button is-info is-large" onClick={onSearch}>
+						<button className="button is-info is-medium" onClick={onSearch}>
 							Search
 						</button>
 						<button
-							className="button is-info is-light is-large"
+							className="button is-info is-light is-medium"
 							onClick={() => navigate('/create-beer')}
 						>
 							Add Beer

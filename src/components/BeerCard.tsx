@@ -19,7 +19,7 @@ export const BeerCard = (props: any) => {
 				<div className="column">
 					<div className="content is-medium ml-5">
 						<p className="title is-1 mb-1">{beer.name}</p>
-						<p>{beer.brewery.name}</p>
+						<p>{beer.brewery?.name ?? ''}</p>
 						<div className="tags">
 							{beer.averageCharacteristics.map((e: BeerCharacteristic) => (
 								<span className="tag is-info">{e}</span>

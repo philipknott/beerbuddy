@@ -1,7 +1,6 @@
 //import DB from '../classes/DB';
 import { BeerStyle } from '../types';
 import React, {useState} from 'react';
-import axios from "axios";
 import DB from '../classes/DB';
 
 const db = DB.instance;
@@ -39,7 +38,7 @@ export function AddBeerForm() {
 			imgURL: input.imgURL
 		}
 
-		axios.post('http://localhost:3001/create-beer', beerInfo)
+		db.addBeer(beerInfo);
 		db.printAllBeers();
 	}
 

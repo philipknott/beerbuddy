@@ -40,7 +40,20 @@ export default class DB {
 		return [];
 	}
 
-	printAllBeers(){
+	private putOneBeer(beerInfo: any) {
+		axios
+		    .post('http://localhost:3001/create-beer', beerInfo)
+  			.then(function (response) {
+    			console.log(response);
+				return response;
+  			});
+	}
+
+	addBeer(beerInfo:any){
+		this.putOneBeer(beerInfo);
+	}
+
+	printAllBeers(){ //for example
 		this.fetchAllBeers;
 	}
 

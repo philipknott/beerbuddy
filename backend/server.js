@@ -11,12 +11,12 @@ app.use(express.json());
 // Database Name
 const dbName = 'beerbuddies';
 
-async function populateMDB(beer,brewery,id) { // ## Populates the mongodb
+async function populateMDB(beer,brewery,style) { // ## Populates the mongodb
     // Use connect method to connect to the server
     await client.connect();
     const db = client.db(dbName);
     const collection = db.collection('beer');
-    collection.insertOne({beername: beer, breweryname: brewery,beerid:id}, function(err, res) {
+    collection.insertOne({beername: beer, breweryname: brewery,beerstyle:style}, function(err, res) {
         if (err) throw err;
         console.log("1 document inserted");
     });
@@ -30,8 +30,12 @@ async function queryMDB() {
     return data;
   }
 
+app.post("/create-beer", function (req, res){
+    populateMDB(req.body.beerName, req.body.brewery, req.body.style);
+})
+
 async function main(){ 
-    populateMDB("Longboard", "Kona Brewing Co.", 1);
+    //populateMDB("Longboard", "Kona Brewing Co.", 1);  //example
     const response = await queryMDB();
     console.log(response);
     return 1;
@@ -44,7 +48,6 @@ async function main(){
         console.dir(response, {
             depth: null
         });
-        //await checkMDB()
   
     } catch (e) {
         console.log(e);

@@ -1,6 +1,7 @@
-import DB from '../classes/DB';
+//import DB from '../classes/DB';
 import { BeerStyle } from '../types';
 import React, {useState} from 'react';
+import axios from "axios";
 
 /*export interface AddBeerFormProps {
 	onSubmit: () => void;
@@ -92,6 +93,16 @@ export function AddBeerForm() {
 	function clickButton(event: { preventDefault: () => void; }){
 		event.preventDefault();
 		console.log(input);
+		const beerInfo = {
+			beerName: input.beerName,
+			style: input.style,
+			brewery: input.brewery,
+			ibu: input.ibu,
+			abv: input.abv,
+			imgURL: input.imgURL
+		}
+
+		axios.post('http://localhost:3001/create-beer', beerInfo)
 	}
 
 	return(

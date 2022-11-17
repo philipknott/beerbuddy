@@ -34,8 +34,8 @@ export default class DB {
 		axios
   			.get("http://localhost:3001/allBeer")
   			.then(function (response) {
-    			console.log(response);
-				return response;
+    			console.log(response.data);
+				return response.data;
   			});
 		return [];
 	}
@@ -44,7 +44,7 @@ export default class DB {
 		axios
 		    .post('http://localhost:3001/create-beer', beerInfo)
   			.then(function (response) {
-    			console.log(response);
+    			//console.log(response);
 				return response;
   			});
 	}
@@ -53,8 +53,10 @@ export default class DB {
 		this.putOneBeer(beerInfo);
 	}
 
-	printAllBeers(){ //for example
-		this.fetchAllBeers;
+	async printAllBeers(): Promise<any>{
+		var resp = await this.fetchAllBeers();
+		//console.log(resp);
+		return resp;
 	}
 
 	getBreweryByName(name: string): Brewery {

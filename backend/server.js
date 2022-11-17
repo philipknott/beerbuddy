@@ -30,9 +30,10 @@ async function queryMDB() {
     return data;
   }
 
-app.get("/allBeer", function (req, res){
-    data = queryMDB()
-    return data;
+app.get("/allBeer", async function (req, res){
+    data = await queryMDB();
+    console.log(data);
+    res.send(data);
 })
 
 app.post("/create-beer", function (req, res){

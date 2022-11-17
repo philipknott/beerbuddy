@@ -1,4 +1,3 @@
-//import DB from '../classes/DB';
 import { BeerStyle } from '../types';
 import React, {useState} from 'react';
 import DB from '../classes/DB';
@@ -26,9 +25,9 @@ export function AddBeerForm() {
 		})
 	}
 
-	function clickButton(event: { preventDefault: () => void; }){
+	async function clickButton(event: { preventDefault: () => void; }){
 		event.preventDefault();
-		console.log(input);
+		//console.log(input);
 		const beerInfo = {
 			beerName: input.beerName,
 			style: input.style,

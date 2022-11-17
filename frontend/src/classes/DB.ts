@@ -1,6 +1,7 @@
 import testData from '../public/testdata';
 import Beer from './Beer';
 import Brewery from './Brewery';
+import axios from "axios";
 
 /* Singleton */
 export default class DB {
@@ -30,7 +31,17 @@ export default class DB {
 	}
 
 	private fetchAllBeers(): Beer[] {
-		return testData.beers;
+		axios
+  			.get("http://localhost:3001/allBeer")
+  			.then(function (response) {
+    			console.log(response);
+				return response;
+  			});
+		return [];
+	}
+
+	printAllBeers(){
+		this.fetchAllBeers;
 	}
 
 	getBreweryByName(name: string): Brewery {

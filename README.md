@@ -19,6 +19,7 @@ Alex has implemented the backend components such as the MongoDB and the express.
     The Singleton pattern has been implemented for a class called DB, which contains all the logic for fetching data from the database. Using lazy initialization, the singular instance of the DB class can be accessed across classes and components on the platform to handle queries and populate data onto our frontend.
 
  ## Class Diagram:
+ ![unnamed](https://user-images.githubusercontent.com/77478318/202345501-2d505d2d-a6c1-40d5-bdb2-dd4a358d69e4.png)
 
  ## Plan for Next Iteration:
 For the next iteration we need to implement the login for users as well as the rating system for the beers. We currently have a database that can hold the beers, but we need to create a system to prompt the user to input their rating as well as a method to store it under each beer.

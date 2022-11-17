@@ -14,27 +14,31 @@ const dbName = 'beerbuddies';
 async function populateMDB(beer,brewery,id) { // ## Populates the mongodb
     // Use connect method to connect to the server
     await client.connect();
-    console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection('beer');
-    //db.user.insert({name: "#Mojito", id: 1503905472822542336, geo: null})
     collection.insertOne({beername: beer, breweryname: brewery,beerid:id}, function(err, res) {
         if (err) throw err;
         console.log("1 document inserted");
     });
 }
 
+async function queryMDB() { 
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection('beer');
+    const data = await collection.find({}).toArray();
+    return data;
+  }
+
 async function main(){ 
-    /*for (let i = 0; i < 25; i++) {//RUN EVERY THURSDAY AT NOON
-      getRequest(CocktailHashtag[i],CocktailNames[i])
-    }
-    const res = await queryMDB()*/
+    populateMDB("Longboard", "Kona Brewing Co.", 1);
+    const response = await queryMDB();
+    console.log(response);
     return 1;
 }
 
 (async () => {
     try {
-        console.log("############## START ##################")
         // Make request
         const response = await main();
         console.dir(response, {

@@ -11,12 +11,12 @@ app.use(express.json());
 // Database Name
 const dbName = 'beerbuddies';
 
-async function populateMDB(beer,brewery,style) { // ## Populates the mongodb
+async function populateMDB(beer,brewery,style,abv,ibu,img) { // ## Populates the mongodb
     // Use connect method to connect to the server
     await client.connect();
     const db = client.db(dbName);
     const collection = db.collection('beer');
-    collection.insertOne({beername: beer, breweryname: brewery,beerstyle:style}, function(err, res) {
+    collection.insertOne({beername: beer, breweryname: brewery, beerstyle:style, abv:abv, ibu:ibu, img:img}, function(err, res) {
         if (err) throw err;
         console.log("1 document inserted");
     });
@@ -30,12 +30,17 @@ async function queryMDB() {
     return data;
   }
 
+app.get("/allBeer", function (req, res){
+    data = queryMDB()
+    return data;
+})
+
 app.post("/create-beer", function (req, res){
-    populateMDB(req.body.beerName, req.body.brewery, req.body.style);
+    populateMDB(req.body.beerName, req.body.brewery, req.body.style,req.body.abv, req.body.ibu, req.body.imgURL);
 })
 
 async function main(){ 
-    //populateMDB("Longboard", "Kona Brewing Co.", 1);  //example
+    //populateMDB("Longboard", "Kona Brewing Co.", 4.6, 20, "https://www.totalwine.com/dynamic/x490,6pk/media/sys_master/twmmedia/h22/h37/14160575135774.png");  //example
     const response = await queryMDB();
     console.log(response);
     return 1;

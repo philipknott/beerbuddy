@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BeerStyle, NewBeerParams, NewBreweryParams } from '../types';
+import { BEER_STYLES, NewBeerParams, NewBreweryParams } from '../types';
 import DB from '../classes/DB';
 import { SelectInput, SubmitButton, TextInput } from '../lib/FormComponents';
 
@@ -17,17 +17,10 @@ export default function AddBeerForm(props: AddBeerFormProps) {
 
 	const [beerInput, setBeerInput] = useState<NewBeerParams>({
 		name: '',
-		style: '',
 		breweryID: '',
-		ibu: 0,
-		abv: 0,
-		imgURL: '',
 	});
-
 	const [breweryInput, setBreweryInput] = useState<NewBreweryParams>({
 		name: '',
-		location: '',
-		imgURL: '',
 	});
 
 	const [addingNewBrewery, setAddingNewBrewery] = useState<boolean>(false);
@@ -41,6 +34,11 @@ export default function AddBeerForm(props: AddBeerFormProps) {
 		event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
 	) {
 		const { name, value } = event.target;
+
+		if (name == 'breweryID') {
+			setAddingNewBrewery(event.target.value == NEW_BREWERY_STR);
+		}
+
 		setBeerInput((prevInput) => ({
 			...prevInput,
 			[name]: value,
@@ -59,21 +57,6 @@ export default function AddBeerForm(props: AddBeerFormProps) {
 		event.preventDefault();
 		props.onSubmit(beerInput, addingNewBrewery ? breweryInput : undefined);
 	}
-
-	// async function onSubmit(event: React.MouseEvent<HTMLElement>) {
-	// 	event.preventDefault();
-	// 	const beerInfo = {
-	// 		beerName: beerInput.beerName,
-	// 		style: beerInput.style,
-	// 		brewery: beerInput.brewery,
-	// 		ibu: beerInput.ibu,
-	// 		abv: beerInput.abv,
-	// 		imgURL: beerInput.imgURL,
-	// 	};
-
-	// 	db.addBeer(beerInfo);
-	// 	db.printAllBeers();
-	// }
 
 	function checkinputsAreValid(): boolean {
 		if (beerInput.name == '') {
@@ -100,19 +83,19 @@ export default function AddBeerForm(props: AddBeerFormProps) {
 				<SelectInput
 					label="Style"
 					name="style"
-					options={Object.values(BeerStyle).map((value) => ({
-						value,
-						label: value,
+					options={BEER_STYLES.map((style) => ({
+						text: style,
+						value: style,
 					}))}
 					onChange={onBeerInputChange}
 				/>
 
 				<SelectInput
 					label="Brewery"
-					options={[{ label: NEW_BREWERY_STR, value: undefined }]}
+					options={[{ text: NEW_BREWERY_STR, value: undefined }]} // TODO
 					name="breweryID"
-					onChange={(e) => {
-						setAddingNewBrewery(e.target.value == NEW_BREWERY_STR);
+					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+						setAddingNewBrewery(e.target.value == undefined);
 						onBeerInputChange(e);
 					}}
 					isRequired

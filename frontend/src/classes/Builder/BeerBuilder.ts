@@ -1,4 +1,3 @@
-import { BeerStyle } from '../../types';
 import Beer from '../Beer';
 import IBuilder from './Builder';
 
@@ -12,7 +11,7 @@ export default class BeerBuilder implements IBuilder {
 		return this;
 	}
 
-	setStyle(style: BeerStyle | undefined): BeerBuilder {
+	setStyle(style: string | undefined): BeerBuilder {
 		if (style) {
 			this._beer!.style = style;
 		}

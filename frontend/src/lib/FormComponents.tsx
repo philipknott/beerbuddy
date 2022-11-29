@@ -38,10 +38,11 @@ export const TextInput = (props: TextInputProps) => {
 };
 
 interface SelectInputProps extends TextInputProps {
-	options?: { label: string; value?: any }[];
+	options?: { value: any; text: string }[];
 }
 
 export const SelectInput = (props: SelectInputProps) => {
+	let i = 0; // unique key for each option
 	return (
 		<div className="field">
 			{props.label && <label className="label">{props.label}</label>}
@@ -49,8 +50,8 @@ export const SelectInput = (props: SelectInputProps) => {
 				<select onChange={props.onChange} name={props.name}>
 					<option></option>
 					{props.options?.map((o) => (
-						<option key={o.label} value={o.value}>
-							{o.label}
+						<option key={i++} value={o.value}>
+							{o.text}
 						</option>
 					))}
 				</select>

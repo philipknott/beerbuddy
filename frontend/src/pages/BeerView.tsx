@@ -1,13 +1,17 @@
 import { BeerCard } from '../components/BeerCard';
 import { useSearchParams } from 'react-router-dom';
 import DB from '../classes/DB';
+import Beer from '../classes/Beer';
+import { useState } from 'react';
 
 const BeerView = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const db = DB.instance;
 
-	const beerId = searchParams.get('id');
-	const beer = db.getBeerById(beerId);
+	const [beer, setBeer] = useState<Beer | undefined>(undefined);
+
+	const beerID = searchParams.get('id');
+	db.getBeerById(beerID).then((value) => setBeer(value));
 
 	return (
 		<div className="container mt-5">
@@ -22,10 +26,14 @@ const BeerView = () => {
 				</ul>
 			</nav>
 
-			<BeerCard beer={beer} />
-			<button className="button is-large is-success is-pulled-right">
-				Create Review
-			</button>
+			{beer && (
+				<>
+					<BeerCard beer={beer} />
+					<button className="button is-large is-success is-pulled-right">
+						Create Review
+					</button>
+				</>
+			)}
 		</div>
 	);
 };

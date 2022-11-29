@@ -1,3 +1,4 @@
+import Beer from '../classes/Beer';
 import Brewery from '../classes/Brewery';
 import BeerBuilder from '../classes/Builder/BeerBuilder';
 import BreweryBuilder from '../classes/Builder/BreweryBuilder';
@@ -12,34 +13,17 @@ const AddBeerView = () => {
 		newBeerParams: NewBeerParams,
 		newBreweryParams?: NewBreweryParams
 	) => {
-		let brewery: Brewery;
-
 		if (newBreweryParams) {
 			// Create new Brewery with given parameters
-			const { name, location, imgURL }: NewBreweryParams = newBreweryParams;
-			brewery = new BreweryBuilder()
-				.reset(name)
-				.setLocation(location)
-				.setImageURL(imgURL)
-				.getResult();
+			const newBrewery = generateNewBrewery(newBreweryParams);
+			db.addBrewery(newBrewery);
 
-			db.addBrewery(brewery);
-
-			newBeerParams.breweryID = brewery.id;
+			newBeerParams.breweryID = newBrewery.id;
 		}
 
-		const { name, breweryID, style, ibu, abv, imgURL }: NewBeerParams =
-			newBeerParams;
-
-		const beer = new BeerBuilder()
-			.reset(name, breweryID)
-			.setStyle(style)
-			.setIBU(ibu)
-			.setABV(abv)
-			.setImageURL(imgURL)
-			.getResult();
-
-		db.addBeer(beer);
+		// Create new beer
+		const newBeer = generateNewBeer(newBeerParams);
+		db.addBeer(newBeer);
 	};
 
 	return (
@@ -57,6 +41,26 @@ const AddBeerView = () => {
 			<AddBeerForm onSubmit={onSubmit} />
 		</div>
 	);
+};
+
+const generateNewBrewery = (params: NewBreweryParams): Brewery => {
+	const { name, location, imgURL }: NewBreweryParams = params;
+	return new BreweryBuilder()
+		.reset(name)
+		.setLocation(location)
+		.setImageURL(imgURL)
+		.getResult();
+};
+
+const generateNewBeer = (params: NewBeerParams): Beer => {
+	const { name, breweryID, style, ibu, abv, imgURL }: NewBeerParams = params;
+	return new BeerBuilder()
+		.reset(name, breweryID)
+		.setStyle(style)
+		.setIBU(ibu)
+		.setABV(abv)
+		.setImageURL(imgURL)
+		.getResult();
 };
 
 export default AddBeerView;

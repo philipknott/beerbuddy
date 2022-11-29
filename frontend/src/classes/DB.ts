@@ -1,38 +1,35 @@
-import testData from '../public/testdata';
+import axios from 'axios';
+import BeerBuilder from './Builder/BeerBuilder';
+import BreweryBuilder from './Builder/BreweryBuilder';
 import Beer from './Beer';
 import Brewery from './Brewery';
-import axios from 'axios';
-import BreweryBuilder from './Builder/BreweryBuilder';
 
 interface SerializedBeer {
 	id: string;
 	name: string;
 	breweryID: string;
-	style: string;
-	imageURL: string;
-	abv: number;
-	ibu: number;
+	style?: string;
+	imageURL?: string;
+	abv?: number;
+	ibu?: number;
 }
 
 interface SerializedBrewery {
 	id: string;
 	name: string;
-	location: string;
-	imageURL: string;
+	location?: string;
+	imageURL?: string;
 }
 
 /* Singleton */
 export default class DB {
-	private static _instance?: DB; // lazy initialization
+	private static _instance: DB = new DB(); // eager instantiation
 	private _allBreweries: Brewery[] = this.fetchAllBreweries();
 	private _allBeers: Beer[] = this.fetchAllBeers();
 
 	private constructor() {}
 
 	static get instance(): DB {
-		if (!this._instance) {
-			this._instance = new DB();
-		}
 		return this._instance;
 	}
 
@@ -46,37 +43,52 @@ export default class DB {
 	}
 
 	private fetchAllBreweries(): Brewery[] {
-		return testData.breweries;
+		// TODO
+		return [];
 	}
 
 	private fetchAllBeers(): Beer[] {
 		axios.get('http://localhost:3001/allBeer').then(function (response) {
-			console.log(response.data);
 			return response.data;
 		});
 		return [];
 	}
 
-	private putOneBeer(beerInfo: any) {
+	private putOneBeer(data: SerializedBeer) {
 		axios
-			.post('http://localhost:3001/create-beer', beerInfo)
+			.post('http://localhost:3001/create-beer', data)
 			.then(function (response) {
-				//console.log(response);
 				return response;
 			});
 	}
 
+	private putOneBrewery(data: SerializedBrewery) {
+		// TODO
+	}
+
 	addBeer(beer: Beer) {
-		// Serialize Beer
 		const serializedBeer: SerializedBeer = {
+			id: beer.id,
 			name: beer.name,
+			breweryID: beer.id,
+			style: beer.style as string,
+			imageURL: beer.imageURL,
+			abv: beer.abv,
+			ibu: beer.ibu,
 		};
 
-		this.putOneBeer(beerInfo);
+		this.putOneBeer(serializedBeer);
 	}
 
 	addBrewery(brewery: Brewery) {
-		// todo
+		const serializedBrewery: SerializedBrewery = {
+			id: brewery.id,
+			name: brewery.name,
+			location: brewery.location,
+			imageURL: brewery.imageURL,
+		};
+
+		this.putOneBrewery(serializedBrewery);
 	}
 
 	async printAllBeers(): Promise<any> {
@@ -95,26 +107,31 @@ export default class DB {
 		return brewery;
 	}
 
-	async getBreweryByID(id: string): Promise<Brewery> {
+	getBreweryByID(id: string): Promise<Brewery> {
 		// TODO
-		return new BreweryBuilder().reset('test').getResult();
+		return new Promise<Brewery>((res, rej) => {
+			res(new BreweryBuilder().reset('test').getResult());
+		});
 	}
 
-	getBeerById(id: string | null): Beer | undefined {
-		return this._allBeers.find((beer) => beer.id == id);
+	getBeerById(id: string | null): Promise<Beer> {
+		// TODO
+		return new Promise<Beer>((res, rej) => {
+			res(new BeerBuilder().reset('testBeer', '').getResult());
+		});
 	}
 
 	/**
 	 * Returns a list of beers that match with the given search parameter. Used when searching for beers.
 	 * @param searchTerm Search parameter
-	 * @returns List of beers that include the search term (appears in beer name or brewery name)
+	 * @returns List of beers that include the search term in beer name
+	 * TODO add brewery search
 	 */
 	getBeerResults(searchTerm: string): Beer[] {
 		searchTerm = searchTerm.toLowerCase();
 		return this._allBeers.filter((beer) => {
 			const beerName = beer.name.toLowerCase();
-			const breweryName = beer.brewery?.name.toLowerCase();
-			return beerName.includes(searchTerm) || breweryName?.includes(searchTerm);
+			return beerName.includes(searchTerm);
 		});
 	}
 }

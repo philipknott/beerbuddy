@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { BeerCharacteristic, BeerStyle } from '../types';
+import { BeerCharacteristic } from '../types';
 import Review from './Review';
 
 export default class Beer {
@@ -8,7 +8,7 @@ export default class Beer {
 	private _breweryID: string;
 
 	// Optional parameters
-	private _style?: BeerStyle;
+	private _style?: string;
 	private _abv?: number;
 	private _ibu?: number;
 	private _imageURL?: string;
@@ -33,11 +33,11 @@ export default class Beer {
 		return this._breweryID;
 	}
 
-	set style(style: BeerStyle | undefined) {
+	set style(style: string | undefined) {
 		this._style = style;
 	}
 
-	get style(): BeerStyle | undefined {
+	get style(): string | undefined {
 		return this._style;
 	}
 

@@ -22,3 +22,18 @@ export enum BeerCharacteristic {
 	HOPPY = 'Hoppy',
 	BITTER = 'Bitter',
 }
+
+export interface NewBeerParams {
+	name: string;
+	breweryID: string;
+	style: BeerStyle;
+	ibu: number;
+	abv: number;
+	imgURL: string;
+}
+
+export interface NewBreweryParams {
+	name: string;
+	location: string;
+	imgURL: string;
+}

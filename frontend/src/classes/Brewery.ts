@@ -6,7 +6,6 @@ export default class Brewery {
 	private _name: string;
 	private _location?: string;
 	private _imageURL?: string;
-	private _beers: Beer[] = [];
 
 	constructor(name: string) {
 		this._name = name;
@@ -34,17 +33,5 @@ export default class Brewery {
 
 	set imageURL(imageURL: string | undefined) {
 		this._imageURL = imageURL;
-	}
-
-	get beers(): Beer[] {
-		return this._beers;
-	}
-
-	set beers(beers: Beer[]) {
-		this._beers = beers;
-	}
-
-	addBeer(beer: Beer) {
-		this._beers.push(beer);
 	}
 }

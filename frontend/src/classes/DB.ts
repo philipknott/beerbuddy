@@ -1,7 +1,25 @@
 import testData from '../public/testdata';
 import Beer from './Beer';
 import Brewery from './Brewery';
-import axios from "axios";
+import axios from 'axios';
+import BreweryBuilder from './Builder/BreweryBuilder';
+
+interface SerializedBeer {
+	id: string;
+	name: string;
+	breweryID: string;
+	style: string;
+	imageURL: string;
+	abv: number;
+	ibu: number;
+}
+
+interface SerializedBrewery {
+	id: string;
+	name: string;
+	location: string;
+	imageURL: string;
+}
 
 /* Singleton */
 export default class DB {
@@ -23,6 +41,7 @@ export default class DB {
 	}
 
 	get allBeers(): Beer[] {
+		this._allBeers = this.fetchAllBeers();
 		return this._allBeers;
 	}
 
@@ -31,29 +50,36 @@ export default class DB {
 	}
 
 	private fetchAllBeers(): Beer[] {
-		axios
-  			.get("http://localhost:3001/allBeer")
-  			.then(function (response) {
-    			console.log(response.data);
-				return response.data;
-  			});
+		axios.get('http://localhost:3001/allBeer').then(function (response) {
+			console.log(response.data);
+			return response.data;
+		});
 		return [];
 	}
 
 	private putOneBeer(beerInfo: any) {
 		axios
-		    .post('http://localhost:3001/create-beer', beerInfo)
-  			.then(function (response) {
-    			//console.log(response);
+			.post('http://localhost:3001/create-beer', beerInfo)
+			.then(function (response) {
+				//console.log(response);
 				return response;
-  			});
+			});
 	}
 
-	addBeer(beerInfo:any){
+	addBeer(beer: Beer) {
+		// Serialize Beer
+		const serializedBeer: SerializedBeer = {
+			name: beer.name,
+		};
+
 		this.putOneBeer(beerInfo);
 	}
 
-	async printAllBeers(): Promise<any>{
+	addBrewery(brewery: Brewery) {
+		// todo
+	}
+
+	async printAllBeers(): Promise<any> {
 		var resp = await this.fetchAllBeers();
 		//console.log(resp);
 		return resp;
@@ -69,8 +95,9 @@ export default class DB {
 		return brewery;
 	}
 
-	getBreweryById(id: string | null): Brewery | undefined {
-		return this._allBreweries.find((brewery) => brewery.id == id);
+	async getBreweryByID(id: string): Promise<Brewery> {
+		// TODO
+		return new BreweryBuilder().reset('test').getResult();
 	}
 
 	getBeerById(id: string | null): Beer | undefined {

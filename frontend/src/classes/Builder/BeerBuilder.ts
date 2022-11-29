@@ -1,50 +1,42 @@
 import { BeerStyle } from '../../types';
 import Beer from '../Beer';
-import Brewery from '../Brewery';
 import IBuilder from './Builder';
 
-interface IBeerBuilder extends IBuilder {
-	reset(name: string): BeerBuilder;
-	setBrewery(brewery: Brewery): BeerBuilder;
-	setStyle(style: BeerStyle): BeerBuilder;
-	setABV(abv: number): BeerBuilder;
-	setIBU(ibu: number): BeerBuilder;
-	setImageURL(url: string): BeerBuilder;
-	getResult(): Beer;
-}
-
-export default class BeerBuilder implements IBeerBuilder {
+export default class BeerBuilder implements IBuilder {
 	private _beer?: Beer;
 
 	constructor() {}
 
-	reset(name: string): BeerBuilder {
-		this._beer = new Beer(name);
+	reset(name: string, breweryID: string): BeerBuilder {
+		this._beer = new Beer(name, breweryID);
 		return this;
 	}
 
-	setBrewery(brewery: Brewery): BeerBuilder {
-		this._beer!.brewery = brewery;
+	setStyle(style: BeerStyle | undefined): BeerBuilder {
+		if (style) {
+			this._beer!.style = style;
+		}
 		return this;
 	}
 
-	setStyle(style: BeerStyle): BeerBuilder {
-		this._beer!.style = style;
+	setABV(abv: number | undefined): BeerBuilder {
+		if (abv) {
+			this._beer!.abv = abv;
+		}
 		return this;
 	}
 
-	setABV(abv: number): BeerBuilder {
-		this._beer!.abv = abv;
+	setIBU(ibu: number | undefined): BeerBuilder {
+		if (ibu) {
+			this._beer!.ibu = ibu;
+		}
 		return this;
 	}
 
-	setIBU(ibu: number): BeerBuilder {
-		this._beer!.ibu = ibu;
-		return this;
-	}
-
-	setImageURL(url: string): BeerBuilder {
-		this._beer!.imageURL = url;
+	setImageURL(url: string | undefined): BeerBuilder {
+		if (url) {
+			this._beer!.imageURL = url;
+		}
 		return this;
 	}
 

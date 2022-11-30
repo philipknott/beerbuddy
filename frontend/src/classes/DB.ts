@@ -35,7 +35,18 @@ export default class DB {
   			.get("http://localhost:3001/allBeer")
   			.then(function (response) {
     			console.log(response.data);
-				return response.data;
+				var tempBeers:Beer[] = [];
+				for (let i = 0; i < response.data.length; i++) {
+				    var tempBeer:Beer = new Beer(response.data[i].beername);
+					/*tempBeer.abv(response.data[i].abv);
+					tempBeer.ibu(response.data[i].ibu);
+					tempBeer.imageURL(response.data[i].img);
+					tempBeer.brewery(response.data[i].breweryname);
+					tempBeer.style(response.data[i].beerstyle);*/
+					tempBeers.push(tempBeer);
+				}
+				console.log("temp beers", tempBeers);
+				return tempBeers;
   			});
 		return [];
 	}

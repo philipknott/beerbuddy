@@ -1,6 +1,5 @@
 import testData from '../public/testdata';
 import Beer from './Beer';
-import Brewery from './Brewery';
 import axios from "axios";
 import BeerBuilder from './Builder/BeerBuilder';
 
@@ -32,8 +31,7 @@ export default class DB {
 				const beerBuilder = new BeerBuilder();
 				for (let i = 0; i < response.data.length; i++) {
 					const beer1 = beerBuilder
-						.reset(response.data[i].beername)
-						.setBrewery(response.data[i].breweryname)
+						.reset(response.data[i].beername, response.data[i].breweryname)
 						.setStyle(response.data[i].beerstyle)
 						.setABV(response.data[i].abv)
 						.setIBU(response.data[i].ibu)

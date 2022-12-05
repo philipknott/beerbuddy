@@ -7,7 +7,6 @@ import BeerBuilder from './Builder/BeerBuilder';
 /* Singleton */
 export default class DB {
 	private static _instance?: DB; // lazy initialization
-	private _allBreweries: Brewery[] = this.fetchAllBreweries();
 	private _allBeers: Beer[] = this.fetchAllBeers();
 
 	private constructor() {}
@@ -19,16 +18,9 @@ export default class DB {
 		return this._instance;
 	}
 
-	get allBreweries(): Brewery[] {
-		return this._allBreweries;
-	}
-
 	get allBeers(): Beer[] {
+		console.log("allbeers",this._allBeers)
 		return this._allBeers;
-	}
-
-	private fetchAllBreweries(): Brewery[] {
-		return testData.breweries;
 	}
 
 	private fetchAllBeers(): Beer[] {
@@ -49,7 +41,6 @@ export default class DB {
 						.getResult();
 					tempBeers.push(beer1);
 				}
-				console.log("temp beers", tempBeers);
 				return tempBeers;
   			});
 		return [];
@@ -71,20 +62,6 @@ export default class DB {
 		var resp = await this.fetchAllBeers();
 		//console.log(resp);
 		return resp;
-	}
-
-	getBreweryByName(name: string): Brewery {
-		name = name.toLowerCase();
-		const brewery = this._allBreweries.find((brewery) => {
-			const breweryName = brewery.name.toLowerCase();
-			return name == breweryName;
-		});
-		if (!brewery) throw Error(`Brewery '${name}' not found.`);
-		return brewery;
-	}
-
-	getBreweryById(id: string | null): Brewery | undefined {
-		return this._allBreweries.find((brewery) => brewery.id == id);
 	}
 
 	getBeerById(id: string | null): Beer | undefined {

@@ -38,7 +38,6 @@ export function AddBeerForm() {
 		}
 
 		db.addBeer(beerInfo);
-		db.printAllBeers();
 	}
 
 	return(

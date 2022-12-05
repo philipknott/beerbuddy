@@ -59,6 +59,7 @@ app.post("/create-beer", function (req, res){
 
 async function main(){ 
     //populateMDB("Longboard", "Kona Brewing Co.", 4.6, 20, "https://www.totalwine.com/dynamic/x490,6pk/media/sys_master/twmmedia/h22/h37/14160575135774.png");  //example
+    //addReview("Draught",8,"Classic Guinness Beer")
     const response = await queryMDB();
     console.log(response);
     return 1;

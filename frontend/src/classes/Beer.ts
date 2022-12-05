@@ -9,7 +9,7 @@ export default class Beer {
 	private _name: string;
 
 	// Optional parameters
-	private _brewery?: Brewery;
+	private _brewery?: string;
 	private _style?: BeerStyle;
 	private _abv?: number;
 	private _ibu?: number;
@@ -30,12 +30,11 @@ export default class Beer {
 		return this._name;
 	}
 
-	set brewery(brewery: Brewery | undefined) {
+	set brewery(brewery: string | undefined) {
 		this._brewery = brewery;
-		this._brewery?.addBeer(this);
 	}
 
-	get brewery(): Brewery | undefined {
+	get brewery(): string | undefined {
 		return this._brewery;
 	}
 

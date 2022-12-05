@@ -16,10 +16,27 @@ async function populateMDB(beer,brewery,style,abv,ibu,img) { // ## Populates the
     await client.connect();
     const db = client.db(dbName);
     const collection = db.collection('beer');
-    collection.insertOne({beername: beer, breweryname: brewery, beerstyle:style, abv:abv, ibu:ibu, img:img}, function(err, res) {
+    collection.insertOne({beername: beer, breweryname: brewery, beerstyle:style, abv:abv, ibu:ibu, img:img, ratings: [], reviews: []}, function(err, res) {
         if (err) throw err;
         console.log("1 document inserted");
     });
+}
+
+async function addReview(beerName,rating, review) { // ## Populates the mongodb
+    // Use connect method to connect to the server
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection('beer');
+    collection.updateOne({beername: beerName},{ $push:{ratings: rating}}, function(err, res) {
+        if (err) throw err;
+        console.log("1 rating updated");
+    });
+    if(review){
+        collection.updateOne({beername: beerName},{ $push:{reviews: review}}, function(err, res) {
+            if (err) throw err;
+            console.log("1 review updated");
+        });
+    }
 }
 
 async function queryMDB() { 

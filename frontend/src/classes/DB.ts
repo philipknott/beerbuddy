@@ -2,6 +2,7 @@ import testData from '../public/testdata';
 import Beer from './Beer';
 import Brewery from './Brewery';
 import axios from "axios";
+import BeerBuilder from './Builder/BeerBuilder';
 
 /* Singleton */
 export default class DB {
@@ -36,14 +37,17 @@ export default class DB {
   			.then(function (response) {
     			console.log(response.data);
 				var tempBeers:Beer[] = [];
+				const beerBuilder = new BeerBuilder();
 				for (let i = 0; i < response.data.length; i++) {
-				    var tempBeer:Beer = new Beer(response.data[i].beername);
-					/*tempBeer.abv(response.data[i].abv);
-					tempBeer.ibu(response.data[i].ibu);
-					tempBeer.imageURL(response.data[i].img);
-					tempBeer.brewery(response.data[i].breweryname);
-					tempBeer.style(response.data[i].beerstyle);*/
-					tempBeers.push(tempBeer);
+					const beer1 = beerBuilder
+						.reset(response.data[i].beername)
+						.setBrewery(response.data[i].breweryname)
+						.setStyle(response.data[i].beerstyle)
+						.setABV(response.data[i].abv)
+						.setIBU(response.data[i].ibu)
+						.setImageURL(response.data[i].img)
+						.getResult();
+					tempBeers.push(beer1);
 				}
 				console.log("temp beers", tempBeers);
 				return tempBeers;
@@ -55,7 +59,6 @@ export default class DB {
 		axios
 		    .post('http://localhost:3001/create-beer', beerInfo)
   			.then(function (response) {
-    			//console.log(response);
 				return response;
   			});
 	}
@@ -97,8 +100,8 @@ export default class DB {
 		searchTerm = searchTerm.toLowerCase();
 		return this._allBeers.filter((beer) => {
 			const beerName = beer.name.toLowerCase();
-			const breweryName = beer.brewery?.name.toLowerCase();
-			return beerName.includes(searchTerm) || breweryName?.includes(searchTerm);
+			//const breweryName = beer.brewery?.name.toLowerCase();
+			//return beerName.includes(searchTerm) || breweryName?.includes(searchTerm);
 		});
 	}
 }

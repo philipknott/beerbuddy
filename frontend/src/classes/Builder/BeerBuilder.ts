@@ -5,7 +5,7 @@ import IBuilder from './Builder';
 
 interface IBeerBuilder extends IBuilder {
 	reset(name: string): BeerBuilder;
-	setBrewery(brewery: Brewery): BeerBuilder;
+	setBrewery(brewery: string): BeerBuilder;
 	setStyle(style: BeerStyle): BeerBuilder;
 	setABV(abv: number): BeerBuilder;
 	setIBU(ibu: number): BeerBuilder;
@@ -23,7 +23,7 @@ export default class BeerBuilder implements IBeerBuilder {
 		return this;
 	}
 
-	setBrewery(brewery: Brewery): BeerBuilder {
+	setBrewery(brewery: string): BeerBuilder {
 		this._beer!.brewery = brewery;
 		return this;
 	}

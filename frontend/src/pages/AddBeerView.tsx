@@ -1,7 +1,16 @@
-import { AddBeerForm } from '../components/AddBeerForm';
+import { useNavigate } from 'react-router-dom';
+import Beer from '../classes/Beer';
+import AddBeerForm from '../components/AddBeerForm';
 
 const AddBeerView = () => {
-	const onSubmit = () => {};
+	const navigate = useNavigate();
+
+	const onSubmit = (newBeer: Beer) => {
+		// TODO: add new beer to database
+		console.log('--- New Beer ---');
+		console.log(newBeer);
+		navigate('/');
+	};
 
 	return (
 		<div className="container section is-max-desktop">

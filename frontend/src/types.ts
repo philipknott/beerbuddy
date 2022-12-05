@@ -1,17 +1,17 @@
-export enum BeerStyle {
-	PALE_LAGER = 'Pale Lager',
-	DARK_LAGER = 'Dark Lager',
-	BROWN_ALE = 'Brown Ale',
-	PILSNER = 'Pilsner',
-	PALE_ALE = 'Pale Ale',
-	INDIA_PALE_ALE = 'India Pale Ale',
-	PORTER = 'Porter',
-	STOUT = 'Stout',
-	BELGIAN = 'Belgian-Style Ale',
-	WHEAT = 'Wheat',
-	SOUR = 'Sour',
-	SPECIALTY = 'Specialty',
-}
+export const BEER_STYLES = [
+	'Pale Lager',
+	'Dark Lager',
+	'Brown Ale',
+	'Pilsner',
+	'Pale Ale',
+	'India Pale Ale',
+	'Porter',
+	'Stout',
+	'Belgian-Style Ale',
+	'Wheat',
+	'Sour',
+	'Specialty',
+];
 
 export enum BeerCharacteristic {
 	SWEET = 'Sweet',
@@ -21,4 +21,13 @@ export enum BeerCharacteristic {
 	FLORAL = 'Floral',
 	HOPPY = 'Hoppy',
 	BITTER = 'Bitter',
+}
+
+export interface NewBeerParams {
+	name: string;
+	brewery: string;
+	style?: string;
+	ibu?: number;
+	abv?: number;
+	imgURL?: string;
 }

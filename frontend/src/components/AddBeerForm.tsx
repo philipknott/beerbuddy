@@ -68,6 +68,16 @@ export default function AddBeerForm(props: AddBeerFormProps) {
 	const onSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 
+		const beerInfo = {
+			beerName: input.name,
+			style: input.style,
+			brewery: addingNewBrewery ? input.newBrewery : input.brewery,
+			ibu: input.ibu,
+			abv: input.abv,
+			imgURL: input.imgURL
+		}
+		db.addBeer(beerInfo);
+
 		// Create new beer from input
 		const newBeer = new BeerBuilder()
 			.reset(input.name, addingNewBrewery ? input.newBrewery : input.brewery)

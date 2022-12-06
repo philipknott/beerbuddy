@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import NavBar from './components/NavBar';
 import './index.css';
 import AddBeerView from './pages/AddBeerView';
+import AddReviewView from './pages/AddReviewView';
 
 const router = createBrowserRouter([
 	{
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
 	{
 		path: '/create-beer',
 		element: <AddBeerView />,
+	},
+	{
+		path: '/create-review',
+		element: <AddReviewView />,
 	},
 ]);
 

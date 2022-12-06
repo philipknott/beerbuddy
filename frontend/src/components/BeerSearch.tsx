@@ -44,6 +44,12 @@ export const BeerSearch = () => {
 						>
 							Add Beer
 						</button>
+						<button
+							className="button is-info is-light is-medium"
+							onClick={() => navigate('/create-review')}
+						>
+							Add Review
+						</button>
 					</div>
 				</div>
 			</div>

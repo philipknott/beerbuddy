@@ -3,7 +3,7 @@ import Beer from '../classes/Beer';
 import BeerBuilder from '../classes/Builder/BeerBuilder';
 import DB from '../classes/DB';
 import { SelectInput, SubmitButton, TextInput } from '../lib/FormComponents';
-import { BeerParams, BEER_STYLES } from '../types';
+import { BEER_STYLES } from '../types';
 
 const NEW_BREWERY_STR = '[New Brewery]';
 
@@ -18,18 +18,21 @@ interface NewBeerInputParams {
 	style?: string;
 	ibu?: number;
 	abv?: number;
+	rating?: number;
 	imgURL?: string;
 }
 
 export default function AddBeerForm(props: AddBeerFormProps) {
-	const db = DB.instance;
-	const allBreweries = ['test1', 'test2', 'test3']; // TODO: Grab all breweries from database
-
 	const [input, setInput] = useState<NewBeerInputParams>({
 		name: '',
 		brewery: '',
 		newBrewery: '',
 	});
+
+	const [allBreweries, setAllBreweries] = useState<string[]>([]);
+	useEffect(() => {
+		DB.instance.getAllBreweries().then((result) => setAllBreweries(result));
+	}, []);
 
 	const [addingNewBrewery, setAddingNewBrewery] = useState<boolean>(false);
 	const [inputsAreValid, setInputsAreValid] = useState<boolean>(false);
@@ -74,6 +77,7 @@ export default function AddBeerForm(props: AddBeerFormProps) {
 			.setStyle(input.style)
 			.setABV(input.abv)
 			.setIBU(input.ibu)
+			.setRating(input.rating)
 			.setImageURL(input.imgURL)
 			.getResult();
 
@@ -136,7 +140,23 @@ export default function AddBeerForm(props: AddBeerFormProps) {
 					</div>
 				</div>
 
-				<TextInput label="Image URL" onChange={onInputChange} name="imgURL" />
+				<div className="columns">
+					<div className="column">
+						<TextInput
+							type="number"
+							label="Rating"
+							name="rating"
+							onChange={onInputChange}
+						/>
+					</div>
+					<div className="column">
+						<TextInput
+							label="Image URL"
+							name="imgURL"
+							onChange={onInputChange}
+						/>
+					</div>
+				</div>
 
 				<SubmitButton onClick={onSubmit} disabled={!inputsAreValid}>
 					Add Beer

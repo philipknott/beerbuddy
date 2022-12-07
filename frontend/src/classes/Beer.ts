@@ -1,8 +1,4 @@
-import { BeerCharacteristic } from '../types';
-import { v4 as uuidv4 } from 'uuid';
-
 export default class Beer {
-	private _id: string = uuidv4();
 	private _name: string;
 	private _brewery: string;
 
@@ -10,17 +6,12 @@ export default class Beer {
 	private _style?: string;
 	private _abv?: number;
 	private _ibu?: number;
+	private _rating?: number;
 	private _imageURL?: string;
-	private _averageRating?: number;
-	private _averageCharacteristics: BeerCharacteristic[] = []; // this will eventually use decorator
 
 	constructor(name: string, brewery: string) {
 		this._name = name;
 		this._brewery = brewery;
-	}
-
-	get id(): string {
-		return this._id;
 	}
 
 	get name(): string {
@@ -55,15 +46,19 @@ export default class Beer {
 		return this._ibu;
 	}
 
+	set rating(rating: number | undefined) {
+		this._rating = rating;
+	}
+
+	get rating(): number | undefined {
+		return this._rating;
+	}
+
 	set imageURL(imageURL: string | undefined) {
 		this._imageURL = imageURL;
 	}
 
 	get imageURL(): string | undefined {
 		return this._imageURL;
-	}
-
-	get averageCharacteristics(): BeerCharacteristic[] {
-		return this._averageCharacteristics;
 	}
 }

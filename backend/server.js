@@ -92,9 +92,6 @@ app.get('/allBeer', async function (req, res) {
 });
 
 app.post('/create-beer', function (req, res) {
-	console.log('req.body');
-	console.log(req.body);
-
 	populateMDB(
 		req.body.beername,
 		req.body.breweryname,
@@ -105,6 +102,11 @@ app.post('/create-beer', function (req, res) {
 		// req.body.rating,
 		// req.body.characteristics
 	);
+});
+
+app.post('/delete-beer', function (req, res) {
+	const { name, brewery } = req.body;
+	deleteBeer(name, brewery);
 });
 
 async function main() {

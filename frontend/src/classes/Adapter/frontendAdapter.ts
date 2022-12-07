@@ -1,8 +1,8 @@
+import { BeerParams } from '../../types';
 import Beer from '../Beer';
-import BeerBuilder from '../Builder/BeerBuilder';
-import { BeerCharacteristic, BeerParams } from '../../types';
+import Adapter from './Adapter';
 
-export default class backendAdapter{
+export default class backendAdapter extends Adapter{
     public request(response: Beer): BeerParams{
         return {
 			beername: response.name,

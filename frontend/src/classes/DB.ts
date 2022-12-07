@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { BeerParams } from '../types';
+import backendAdapter from './Adapter/backendAdapter';
+import frontendAdapter from './Adapter/frontendAdapter';
 import Beer from './Beer';
 import BeerBuilder from './Builder/BeerBuilder';
 
@@ -26,18 +28,8 @@ export default class DB {
 	async populateAllBeers() {
 		try {
 			const resp = await axios.get('http://localhost:3001/allBeer');
-			const builder = new BeerBuilder();
-
-			this._allBeers = resp.data.map((params: BeerParams) => {
-				const { beername, breweryname, beerstyle, abv, ibu, img } = params;
-				return builder
-					.reset(beername, breweryname)
-					.setStyle(beerstyle)
-					.setABV(abv)
-					.setIBU(ibu)
-					.setImageURL(img)
-					.getResult();
-			});
+			const adapter = new backendAdapter();
+			this._allBeers = adapter.createBeer(resp.data); //an adapter was needed to get data into beer objects
 		} catch (err) {
 			console.error(err);
 			this._allBeers = [];
@@ -56,7 +48,8 @@ export default class DB {
 		this._allBeers!.push(beer);
 
 		// Add to backend
-		const beerParams = this.convertToBeerParams(beer);
+		const adapter = new frontendAdapter();
+		const beerParams = adapter.stripObj(beer); //adapter is needed here to strip the object into a simple form for backend
 		this.putOneBeer(beerParams);
 	}
 
@@ -75,17 +68,6 @@ export default class DB {
 				return res;
 			})
 			.catch((err) => console.error(err));
-	}
-
-	private convertToBeerParams(beer: Beer): BeerParams {
-		return {
-			beername: beer.name,
-			breweryname: beer.brewery,
-			beerstyle: beer.style,
-			ibu: beer.ibu,
-			abv: beer.abv,
-			img: beer.imageURL,
-		};
 	}
 
 	async getBeerById(id: string): Promise<Beer | undefined> {

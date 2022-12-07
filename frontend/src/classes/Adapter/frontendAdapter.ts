@@ -2,7 +2,7 @@ import { BeerParams } from '../../types';
 import Beer from '../Beer';
 import Adapter from './Adapter';
 
-export default class backendAdapter extends Adapter {
+export default class frontendAdapter extends Adapter {
 	public request(response: Beer): BeerParams {
 		return {
 			beername: response.name,

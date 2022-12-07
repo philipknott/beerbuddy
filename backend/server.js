@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { setMaxIdleHTTPParsers } = require("http");
 const mongoURI = "mongodb://0.0.0.0:27017/";
 const client = new MongoClient(mongoURI);
 
@@ -39,6 +40,17 @@ async function addReview(beerName,rating, review) { // ## Populates the mongodb
     }
 }
 
+async function deleteBeer(beerName, brewery) { // ## deletes a entry from the mongodb
+    // Use connect method to connect to the server
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection('beer');
+    collection.deleteOne({beername: beerName, breweryname:brewery}, function(err, res) {
+        if (err) throw err;
+        console.log("1 entry deleted");
+    });
+}
+
 async function queryMDB() { 
     await client.connect();
     const db = client.db(dbName);
@@ -58,10 +70,12 @@ app.post("/create-beer", function (req, res){
 })
 
 async function main(){ 
-    //populateMDB("Longboard", "Kona Brewing Co.", 4.6, 20, "https://www.totalwine.com/dynamic/x490,6pk/media/sys_master/twmmedia/h22/h37/14160575135774.png");  //example
+    populateMDB("Longboard", "Kona Brewing Co.", 4.6, 20, "https://www.totalwine.com/dynamic/x490,6pk/media/sys_master/twmmedia/h22/h37/14160575135774.png");  //example
     //addReview("Draught",8,"Classic Guinness Beer")
     const response = await queryMDB();
     console.log(response);
+    deleteBeer("Longboard","Kona Brewing Co.");
+    setTimeout(async () => {console.log(await queryMDB()); }, 5000);
     return 1;
 }
 

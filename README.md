@@ -1,10 +1,11 @@
 # Beer Buddy
 Craft beer review platform. Partner project for CSCI 4448 at CU Boulder. Demonstrates use of object-oriented design patterns (namely Adapter, Singleton, Builder, and Proxy)
 
-
-
 ## Team members: 
 Philip Knott, Alex Moss
+
+## Language Version
+`TypeScript 4.6.4`
 
 ## Work Done:
 

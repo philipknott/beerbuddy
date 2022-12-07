@@ -1,11 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import Beer from '../classes/Beer';
-import { BeerCharacteristic } from '../types';
+import DB from '../classes/DB';
 
 export interface BeerCardProps {
 	beer: Beer;
 }
 
-export const BeerCard = (props: any) => {
+export const BeerCard = (props: BeerCardProps) => {
 	const { beer }: BeerCardProps = props;
 
 	return (
@@ -19,12 +20,7 @@ export const BeerCard = (props: any) => {
 				<div className="column">
 					<div className="content is-medium ml-5">
 						<p className="title is-1 mb-1">{beer.name}</p>
-						<p>{beer.brewery?.name ?? ''}</p>
-						<div className="tags">
-							{beer.averageCharacteristics.map((e: BeerCharacteristic) => (
-								<span className="tag is-info">{e}</span>
-							))}
-						</div>
+						<p>{beer.brewery}</p>
 						<p className="mb-1">
 							<b>Style: </b>
 							{beer.style}
@@ -39,11 +35,11 @@ export const BeerCard = (props: any) => {
 						</p>
 						<p>
 							<b>Average Rating: </b>
-							{beer.averageRating} / 10
+							{beer.rating} / 10
 						</p>
 						<progress
 							className="progress is-info is-small"
-							value={beer.averageRating}
+							value={beer.rating}
 							max="10"
 						></progress>
 					</div>

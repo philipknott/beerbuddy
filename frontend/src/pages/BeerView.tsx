@@ -1,13 +1,22 @@
 import { BeerCard } from '../components/BeerCard';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import DB from '../classes/DB';
+import { useState } from 'react';
+import Beer from '../classes/Beer';
 
 const BeerView = () => {
-	const [searchParams, setSearchParams] = useSearchParams();
-	const db = DB.instance;
+	const [searchParams, _] = useSearchParams();
+	const [beer, setBeer] = useState<Beer | undefined>(undefined);
+	const navigate = useNavigate();
 
-	const beerId = searchParams.get('id');
-	const beer = db.getBeerById(beerId);
+	const name = searchParams.get('name');
+	const brewery = searchParams.get('brewery');
+	DB.instance.getBeer(name!, brewery!).then((result) => setBeer(result));
+
+	const onDelete = () => {
+		DB.instance.removeBeer(beer!);
+		navigate('/');
+	};
 
 	return (
 		<div className="container mt-5">
@@ -21,10 +30,13 @@ const BeerView = () => {
 					</li>
 				</ul>
 			</nav>
-
-			<BeerCard beer={beer} />
-			<button className="button is-large is-success is-pulled-right">
-				Create Review
+			{beer && <BeerCard beer={beer} />}
+			<button
+				className="button is-large is-danger is-pulled-right"
+				disabled={!beer}
+				onClick={onDelete}
+			>
+				Delete
 			</button>
 		</div>
 	);

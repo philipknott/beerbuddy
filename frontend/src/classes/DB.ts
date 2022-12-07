@@ -25,7 +25,17 @@ export default class DB {
 		return this._allBeers!;
 	}
 
-	async populateAllBeers() {
+	async getAllBreweries(): Promise<string[]> {
+		if (!this._allBeers) {
+			await this.populateAllBeers();
+		}
+
+		const breweries = this._allBeers!.map((beer) => beer.brewery);
+		const uniqueBreweries = Array.from(new Set(breweries));
+		return uniqueBreweries;
+	}
+
+	private async populateAllBeers() {
 		try {
 			const resp = await axios.get('http://localhost:3001/allBeer');
 			const adapter = new backendAdapter();
@@ -41,10 +51,11 @@ export default class DB {
 	 * @param beer Beer to add
 	 */
 	async addBeer(beer: Beer) {
-		// Add to cache
 		if (!this._allBeers) {
 			await this.populateAllBeers();
 		}
+
+		// Add to client cache
 		this._allBeers!.push(beer);
 
 		// Add to backend
@@ -58,36 +69,62 @@ export default class DB {
 	 * @param beerParams Beer parameters
 	 */
 	private async putOneBeer(beerParams: BeerParams) {
-		console.log('putonebeer called');
-		console.log(beerParams);
 		axios
 			.post('http://localhost:3001/create-beer', beerParams)
-			.then((res) => {
-				console.log('res:');
-				console.log(res);
-				return res;
+			.catch((err) => console.error(err));
+	}
+
+	async removeBeer(beer: Beer) {
+		if (!this._allBeers) {
+			await this.populateAllBeers();
+		}
+
+		// Remove from client cache
+		this._allBeers!.splice(
+			this._allBeers!.findIndex((e) => e == beer),
+			1
+		);
+
+		console.log('updated beers: ');
+		console.log(this._allBeers);
+
+		// Remove from backend
+		const { name, brewery } = beer;
+		this.deleteBeer(name, brewery);
+	}
+
+	/**
+	 * Asynchronously removes beer from backend, based on name and brewery
+	 * @param name
+	 * @param brewery
+	 */
+	private async deleteBeer(name: string, brewery: string) {
+		axios
+			.post('http://localhost:3001/delete-beer', {
+				name,
+				brewery,
 			})
 			.catch((err) => console.error(err));
 	}
 
-	async getBeerById(id: string): Promise<Beer | undefined> {
-		if (!this._allBeers) {
-			await this.populateAllBeers();
-		}
-		return this._allBeers!.find((beer) => beer.id == id);
+	private convertToBeerParams(beer: Beer): BeerParams {
+		return {
+			beername: beer.name,
+			breweryname: beer.brewery,
+			beerstyle: beer.style,
+			ibu: beer.ibu,
+			abv: beer.abv,
+			img: beer.imageURL,
+		};
 	}
 
-	async getBeerResults(searchTerm: string): Promise<Beer[]> {
-		searchTerm = searchTerm.toLowerCase();
+	async getBeer(name: string, brewery: string) {
 
 		if (!this._allBeers) {
 			this.populateAllBeers();
 		}
-
-		return this._allBeers!.filter((beer) => {
-			const name = beer.name.toLowerCase();
-			const brewery = beer.brewery.toLowerCase();
-			return name.includes(searchTerm) || brewery.includes(searchTerm);
-		});
+		return this._allBeers?.find(
+			(beer) => beer.name === name && beer.brewery === brewery
+		);
 	}
 }

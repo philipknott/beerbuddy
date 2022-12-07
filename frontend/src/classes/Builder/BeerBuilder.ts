@@ -39,6 +39,13 @@ export default class BeerBuilder implements IBuilder {
 		return this;
 	}
 
+	setRating(rating: number | undefined): BeerBuilder {
+		if (rating) {
+			this._beer!.rating = rating;
+		}
+		return this;
+	}
+
 	getResult(): Beer {
 		if (!this._beer) {
 			throw Error('BeerBuilder not reset with beer name');

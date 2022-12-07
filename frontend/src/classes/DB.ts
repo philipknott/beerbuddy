@@ -69,6 +69,7 @@ export default class DB {
 	 * @param beerParams Beer parameters
 	 */
 	private async putOneBeer(beerParams: BeerParams) {
+		// --- PROXY ---
 		axios
 			.post('http://localhost:3001/create-beer', beerParams)
 			.catch((err) => console.error(err));
@@ -85,9 +86,6 @@ export default class DB {
 			1
 		);
 
-		console.log('updated beers: ');
-		console.log(this._allBeers);
-
 		// Remove from backend
 		const { name, brewery } = beer;
 		this.deleteBeer(name, brewery);
@@ -99,6 +97,7 @@ export default class DB {
 	 * @param brewery
 	 */
 	private async deleteBeer(name: string, brewery: string) {
+		// --- PROXY ---
 		axios
 			.post('http://localhost:3001/delete-beer', {
 				name,
@@ -108,7 +107,6 @@ export default class DB {
 	}
 
 	async getBeer(name: string, brewery: string) {
-
 		if (!this._allBeers) {
 			this.populateAllBeers();
 		}

@@ -14,13 +14,13 @@ export const BeerSearch = () => {
 	const onSearch = () => {
 		if (searchTerm === '') {
 			setBeerResults(allBeers);
-			console.log(beerResults);
 		} else {
 			setBeerResults(
 				allBeers.filter((beer) => {
+					const term = searchTerm.toLowerCase();
 					const name = beer.name.toLowerCase();
 					const brewery = beer.brewery.toLowerCase();
-					return searchTerm.includes(name) || searchTerm.includes(brewery);
+					return name.includes(term) || brewery.includes(term);
 				})
 			);
 		}
@@ -49,7 +49,7 @@ export const BeerSearch = () => {
 						type="text"
 						placeholder="Beer/Brewery Name"
 						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+						onChange={(e) => setSearchTerm(e.target.value)}
 						onKeyDown={(e) => {
 							if (e.key == 'Enter') {
 								onSearch();

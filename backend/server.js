@@ -71,8 +71,8 @@ app.post('/create-beer', function (req, res) {
 		req.body.beerstyle,
 		req.body.abv,
 		req.body.ibu,
-		req.body.img
-		// req.body.rating,
+		req.body.img,
+		req.body.rating
 		// req.body.characteristics
 	);
 });

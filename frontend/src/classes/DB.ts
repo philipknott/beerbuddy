@@ -39,7 +39,7 @@ export default class DB {
 		try {
 			const resp = await axios.get('http://localhost:3001/allBeer');
 			const adapter = new backendAdapter();
-			this._allBeers = adapter.createBeer(resp.data); //an adapter was needed to get data into beer objects
+			this._allBeers = adapter.request(resp.data); //an adapter was needed to get data into beer objects
 		} catch (err) {
 			console.error(err);
 			this._allBeers = [];
@@ -60,7 +60,7 @@ export default class DB {
 
 		// Add to backend
 		const adapter = new frontendAdapter();
-		const beerParams = adapter.stripObj(beer); //adapter is needed here to strip the object into a simple form for backend
+		const beerParams = adapter.request(beer); //adapter is needed here to strip the object into a simple form for backend
 		this.putOneBeer(beerParams);
 	}
 
@@ -105,17 +105,6 @@ export default class DB {
 				brewery,
 			})
 			.catch((err) => console.error(err));
-	}
-
-	private convertToBeerParams(beer: Beer): BeerParams {
-		return {
-			beername: beer.name,
-			breweryname: beer.brewery,
-			beerstyle: beer.style,
-			ibu: beer.ibu,
-			abv: beer.abv,
-			img: beer.imageURL,
-		};
 	}
 
 	async getBeer(name: string, brewery: string) {

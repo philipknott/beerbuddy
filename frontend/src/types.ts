@@ -30,4 +30,5 @@ export interface BeerParams {
 	abv?: number;
 	ibu?: number;
 	img?: string;
+	rating?:number
 }

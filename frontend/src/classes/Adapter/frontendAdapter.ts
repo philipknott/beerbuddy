@@ -1,16 +1,17 @@
 import Beer from '../Beer';
 import BeerBuilder from '../Builder/BeerBuilder';
-import { BeerParams } from '../../types';
+import { BeerCharacteristic, BeerParams } from '../../types';
 
 export default class backendAdapter{
-    public stripObj(beer: Beer): BeerParams{
+    public request(response: Beer): BeerParams{
         return {
-			beername: beer.name,
-			breweryname: beer.brewery,
-			beerstyle: beer.style,
-			ibu: beer.ibu,
-			abv: beer.abv,
-			img: beer.imageURL,
+			beername: response.name,
+			breweryname: response.brewery,
+			beerstyle: response.style,
+			ibu: response.ibu,
+			abv: response.abv,
+			img: response.imageURL,
+            rating: response.rating
 		};
     }
 }

@@ -1,7 +1,4 @@
 import { BeerSearch } from '../components/BeerSearch';
-import DB from '../classes/DB';
-
-const db = DB.instance;
 
 const Home = () => {
 	return (

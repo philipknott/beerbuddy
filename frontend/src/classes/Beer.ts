@@ -30,7 +30,7 @@ export default class Beer {
 		return this._name;
 	}
 
-	get brewery(): string | undefined {
+	get brewery(): string {
 		return this._brewery;
 	}
 

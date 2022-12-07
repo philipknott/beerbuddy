@@ -1,19 +1,27 @@
-import { useState } from 'react';
+import { useDeferredValue, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Beer from '../classes/Beer';
 import DB from '../classes/DB';
 import { BeerSearchResultCard } from './BeerSearchResultCard';
 
 export const BeerSearch = () => {
-	const navigate = useNavigate();
 	const db = DB.instance;
+	const navigate = useNavigate();
 
-	const [beerResults, setBeerResults] = useState<Beer[]>(db.allBeers);
+	const [beerResults, setBeerResults] = useState<Beer[] | null>(null);
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
-	const onSearch = () => {
-		setBeerResults(db.getBeerResults(searchTerm));
+	const onSearch = async () => {
+		setBeerResults(
+			searchTerm === ''
+				? await db.getAllBeers()
+				: await db.getBeerResults(searchTerm)
+		);
 	};
+
+	useEffect(() => {
+		db.getAllBeers().then((allBeers) => setBeerResults(allBeers));
+	}, []);
 
 	return (
 		<div>
@@ -53,8 +61,9 @@ export const BeerSearch = () => {
 					</div>
 				</div>
 			</div>
-			{beerResults.map((beer) => (
-				<BeerSearchResultCard beer={beer} key={beer.name} />
+			{!beerResults && <progress className="progress is-primary" max="100" />}
+			{beerResults?.map((beer) => (
+				<BeerSearchResultCard beer={beer} key={beer.id} />
 			))}
 		</div>
 	);

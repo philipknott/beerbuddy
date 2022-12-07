@@ -23,11 +23,11 @@ export enum BeerCharacteristic {
 	BITTER = 'Bitter',
 }
 
-export interface NewBeerParams {
-	name: string;
-	brewery: string;
-	style?: string;
-	ibu?: number;
+export interface BeerParams {
+	beername: string;
+	breweryname: string;
+	beerstyle?: string;
 	abv?: number;
-	imgURL?: string;
+	ibu?: number;
+	img?: string;
 }

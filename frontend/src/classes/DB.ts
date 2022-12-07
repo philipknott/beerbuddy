@@ -1,82 +1,109 @@
-import testData from '../public/testdata';
+import axios from 'axios';
+import { BeerParams } from '../types';
 import Beer from './Beer';
-import axios from "axios";
 import BeerBuilder from './Builder/BeerBuilder';
 
 /* Singleton */
 export default class DB {
-	private static _instance?: DB; // lazy initialization
-	private _allBeers: Beer[] = this.fetchAllBeers();
+	private static _instance: DB = new DB(); // Eager
+	private _allBeers?: Beer[]; // Lazy
 
-	private constructor() {}
+	private constructor() {
+		this.populateAllBeers();
+	}
 
 	static get instance(): DB {
-		if (!this._instance) {
-			this._instance = new DB();
-		}
 		return this._instance;
 	}
 
-	get allBeers(): Beer[] {
-		console.log("allbeers",this._allBeers)
-		return this._allBeers;
+	async getAllBeers(): Promise<Beer[]> {
+		if (!this._allBeers) {
+			await this.populateAllBeers();
+		}
+		return this._allBeers!;
 	}
 
-	private fetchAllBeers(): Beer[] {
-		axios
-  			.get("http://localhost:3001/allBeer")
-  			.then(function (response) {
-    			console.log(response.data);
-				var tempBeers:Beer[] = [];
-				const beerBuilder = new BeerBuilder();
-				for (let i = 0; i < response.data.length; i++) {
-					const beer1 = beerBuilder
-						.reset(response.data[i].beername, response.data[i].breweryname)
-						.setStyle(response.data[i].beerstyle)
-						.setABV(response.data[i].abv)
-						.setIBU(response.data[i].ibu)
-						.setImageURL(response.data[i].img)
-						.getResult();
-					tempBeers.push(beer1);
-				}
-				return tempBeers;
-  			});
-		return [];
-	}
+	async populateAllBeers() {
+		try {
+			const resp = await axios.get('http://localhost:3001/allBeer');
+			const builder = new BeerBuilder();
 
-	private putOneBeer(beerInfo: any) {
-		axios
-		    .post('http://localhost:3001/create-beer', beerInfo)
-  			.then(function (response) {
-				return response;
-  			});
-	}
-
-	addBeer(beerInfo:any){
-		this.putOneBeer(beerInfo);
-	}
-
-	async printAllBeers(): Promise<any>{
-		var resp = await this.fetchAllBeers();
-		//console.log(resp);
-		return resp;
-	}
-
-	getBeerById(id: string | null): Beer | undefined {
-		return this._allBeers.find((beer) => beer.id == id);
+			this._allBeers = resp.data.map((params: BeerParams) => {
+				const { beername, breweryname, beerstyle, abv, ibu, img } = params;
+				return builder
+					.reset(beername, breweryname)
+					.setStyle(beerstyle)
+					.setABV(abv)
+					.setIBU(ibu)
+					.setImageURL(img)
+					.getResult();
+			});
+		} catch (err) {
+			console.error(err);
+			this._allBeers = [];
+		}
 	}
 
 	/**
-	 * Returns a list of beers that match with the given search parameter. Used when searching for beers.
-	 * @param searchTerm Search parameter
-	 * @returns List of beers that include the search term (appears in beer name or brewery name)
+	 * Adds new beer to local cache and backend, separately.
+	 * @param beer Beer to add
 	 */
-	getBeerResults(searchTerm: string): Beer[] {
+	async addBeer(beer: Beer) {
+		// Add to cache
+		if (!this._allBeers) {
+			await this.populateAllBeers();
+		}
+		this._allBeers!.push(beer);
+
+		// Add to backend
+		const beerParams = this.convertToBeerParams(beer);
+		this.putOneBeer(beerParams);
+	}
+
+	/**
+	 * Asynchronously adds beer to backend
+	 * @param beerParams Beer parameters
+	 */
+	private async putOneBeer(beerParams: BeerParams) {
+		axios
+			.post('http://localhost:3001/create-beer', beerParams)
+			.then((res) => {
+				console.log('res:');
+				console.log(res);
+				return res;
+			})
+			.catch((err) => console.error(err));
+	}
+
+	private convertToBeerParams(beer: Beer): BeerParams {
+		return {
+			beername: beer.name,
+			breweryname: beer.brewery,
+			beerstyle: beer.style,
+			ibu: beer.ibu,
+			abv: beer.abv,
+			img: beer.imageURL,
+		};
+	}
+
+	async getBeerById(id: string): Promise<Beer | undefined> {
+		if (!this._allBeers) {
+			await this.populateAllBeers();
+		}
+		return this._allBeers!.find((beer) => beer.id == id);
+	}
+
+	async getBeerResults(searchTerm: string): Promise<Beer[]> {
 		searchTerm = searchTerm.toLowerCase();
-		return this._allBeers.filter((beer) => {
-			const beerName = beer.name.toLowerCase();
-			//const breweryName = beer.brewery?.name.toLowerCase();
-			//return beerName.includes(searchTerm) || breweryName?.includes(searchTerm);
+
+		if (!this._allBeers) {
+			this.populateAllBeers();
+		}
+
+		return this._allBeers!.filter((beer) => {
+			const name = beer.name.toLowerCase();
+			const brewery = beer.brewery.toLowerCase();
+			return name.includes(searchTerm) || brewery.includes(searchTerm);
 		});
 	}
 }

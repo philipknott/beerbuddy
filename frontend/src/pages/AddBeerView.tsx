@@ -7,10 +7,7 @@ const AddBeerView = () => {
 	const navigate = useNavigate();
 
 	const onSubmit = async (newBeer: Beer) => {
-		// TODO: add new beer to database
 		await DB.instance.addBeer(newBeer);
-		console.log('--- New Beer ---');
-		console.log(newBeer);
 		navigate('/');
 	};
 

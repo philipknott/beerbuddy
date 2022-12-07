@@ -3,7 +3,7 @@ import Beer from '../classes/Beer';
 import BeerBuilder from '../classes/Builder/BeerBuilder';
 import DB from '../classes/DB';
 import { SelectInput, SubmitButton, TextInput } from '../lib/FormComponents';
-import { BEER_STYLES } from '../types';
+import { BeerParams, BEER_STYLES } from '../types';
 
 const NEW_BREWERY_STR = '[New Brewery]';
 
@@ -67,16 +67,6 @@ export default function AddBeerForm(props: AddBeerFormProps) {
 
 	const onSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-
-		const beerInfo = {
-			beerName: input.name,
-			style: input.style,
-			brewery: addingNewBrewery ? input.newBrewery : input.brewery,
-			ibu: input.ibu,
-			abv: input.abv,
-			imgURL: input.imgURL
-		}
-		db.addBeer(beerInfo);
 
 		// Create new beer from input
 		const newBeer = new BeerBuilder()

@@ -65,6 +65,8 @@ export default class DB {
 	 * @param beerParams Beer parameters
 	 */
 	private async putOneBeer(beerParams: BeerParams) {
+		console.log('putonebeer called');
+		console.log(beerParams);
 		axios
 			.post('http://localhost:3001/create-beer', beerParams)
 			.then((res) => {

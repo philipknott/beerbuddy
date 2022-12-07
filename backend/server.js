@@ -12,7 +12,7 @@ app.use(express.json());
 // Database Name
 const dbName = 'beerbuddies';
 
-async function populateMDB(beer, brewery, style, abv, ibu, img) {
+async function populateMDB(beer, brewery, style, abv, ibu, img,rating) {
 	// ## Populates the mongodb
 	// Use connect method to connect to the server
 	await client.connect();
@@ -26,40 +26,13 @@ async function populateMDB(beer, brewery, style, abv, ibu, img) {
 			abv: abv,
 			ibu: ibu,
 			img: img,
-			ratings: [],
-			reviews: [],
+			rating: rating,
 		},
 		function (err, res) {
 			if (err) throw err;
 			console.log('1 document inserted');
 		}
 	);
-}
-
-async function addReview(beerName, rating, review) {
-	// ## Populates the mongodb
-	// Use connect method to connect to the server
-	await client.connect();
-	const db = client.db(dbName);
-	const collection = db.collection('beer');
-	collection.updateOne(
-		{ beername: beerName },
-		{ $push: { ratings: rating } },
-		function (err, res) {
-			if (err) throw err;
-			console.log('1 rating updated');
-		}
-	);
-	if (review) {
-		collection.updateOne(
-			{ beername: beerName },
-			{ $push: { reviews: review } },
-			function (err, res) {
-				if (err) throw err;
-				console.log('1 review updated');
-			}
-		);
-	}
 }
 
 async function deleteBeer(beerName, brewery) {
@@ -110,20 +83,19 @@ app.post('/delete-beer', function (req, res) {
 });
 
 async function main() {
-	populateMDB(
+	/*populateMDB(
 		'Longboard',
 		'Kona Brewing Co.',
 		4.6,
 		20,
 		'https://www.totalwine.com/dynamic/x490,6pk/media/sys_master/twmmedia/h22/h37/14160575135774.png'
-	); //example
-	//addReview("Draught",8,"Classic Guinness Beer")
+	);*/
 	const response = await queryMDB();
 	console.log(response);
-	deleteBeer('Longboard', 'Kona Brewing Co.');
+	/*deleteBeer('Longboard', 'Kona Brewing Co.');
 	setTimeout(async () => {
 		console.log(await queryMDB());
-	}, 5000);
+	}, 5000);*/
 	return 1;
 }
 

@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import Beer from '../classes/Beer';
+import DB from '../classes/DB';
 import AddBeerForm from '../components/AddBeerForm';
 
 const AddBeerView = () => {
 	const navigate = useNavigate();
 
-	const onSubmit = (newBeer: Beer) => {
+	const onSubmit = async (newBeer: Beer) => {
 		// TODO: add new beer to database
+		await DB.instance.addBeer(newBeer);
 		console.log('--- New Beer ---');
 		console.log(newBeer);
 		navigate('/');
